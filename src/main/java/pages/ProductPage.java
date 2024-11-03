@@ -1,9 +1,14 @@
 package pages;
 
+import dev.failsafe.Timeout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,12 +19,17 @@ public class ProductPage {
     private By addToCartButton = By.xpath("//div[@class='product-action'] //button");
     private By cartButton = By.cssSelector("a.cart-icon");
     private By cartProducts = By.xpath("//div[@class='cart-preview active' ] //p[@class='product-name']");
+    private By proceedToCheckoutButton = By.xpath("//button[text()='PROCEED TO CHECKOUT']");
 
     public ProductPage(WebDriver driver) {
         this.driver = driver;
     }
 
 
+    private void waits(WebElement element) {
+        WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(3));
+        wait.until(ExpectedConditions.visibilityOf(element));
+    }
     public void chooseProduct(String[] selectedItems) {
         //My method
         //
@@ -50,8 +60,8 @@ public class ProductPage {
         }
     }
 
-    public boolean assertOnProducts(String[] selectedItems) throws InterruptedException {
-        Thread.sleep(2000);
+    public boolean productsInCart(String[] selectedItems) {
+//        waits(driver.findElement(proceedToCheckoutButton));
         driver.findElement(cartButton).click();
         int j = 0;
         List selectedItemsList = Arrays.asList(selectedItems);
@@ -63,10 +73,12 @@ public class ProductPage {
                 j++;
             }
         }
-            if (j == cartItems.size())
+            if (j == selectedItemsList.size())
                 return true;
-            else
+            else{
                 return false;
+
+            }
 
     }
 

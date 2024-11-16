@@ -1,10 +1,8 @@
 package pages;
 
-import dev.failsafe.Timeout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -30,7 +28,7 @@ public class ProductPage {
         WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(3));
         wait.until(ExpectedConditions.visibilityOf(element));
     }
-    public void chooseProduct(String[] selectedItems) {
+    public CheckoutPage chooseProduct(String[] selectedItems) {
         //My method
         //
 //       List<WebElement> allItems=driver.findElements(products);
@@ -53,14 +51,17 @@ public class ProductPage {
                 j++;
                 driver.findElements(addToCartButton).get(i).click();
                 if (j == selectedItems.length) {
+                    driver.findElement(cartButton).click();
+                    driver.findElement(proceedToCheckoutButton).click();
                     break;
 
                 }
             }
         }
+        return new CheckoutPage(driver);
     }
 
-    public boolean productsInCart(String[] selectedItems) {
+    public boolean getNumberOfProductsInCart(String[] selectedItems) {
 //        waits(driver.findElement(proceedToCheckoutButton));
         driver.findElement(cartButton).click();
         int j = 0;
